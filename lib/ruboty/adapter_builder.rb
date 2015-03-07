@@ -11,13 +11,7 @@ module Ruboty
     end
 
     def build
-      adapter_class.new(robot)
-    end
-
-    private
-
-    def adapter_class
-      self.class.adapter_classes.last
+      self.class.adapter_classes.map {|klass| klass.new(robot) }
     end
   end
 end

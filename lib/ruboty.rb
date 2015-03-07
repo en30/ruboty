@@ -46,7 +46,6 @@ require "ruboty/env/missing_required_key_error"
 require "ruboty/env/validatable"
 require "ruboty/env/validation_error"
 require "ruboty/adapters/base"
-require "ruboty/adapters/shell"
 require "ruboty/brains/base"
 require "ruboty/brains/memory"
 require "ruboty/command_builder"
@@ -59,6 +58,10 @@ require "ruboty/logger"
 require "ruboty/message"
 require "ruboty/robot"
 require "ruboty/version"
+
+if ENV["DISABLE_DEFAULT_ADAPTERS"] != "1"
+  require "ruboty/adapters/shell"
+end
 
 if ENV["DISABLE_DEFAULT_HANDLERS"] != "1"
   require "ruboty/handlers/help"

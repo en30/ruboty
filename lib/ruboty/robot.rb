@@ -5,8 +5,6 @@ module Ruboty
 
     include Mem
 
-    delegate :say, to: :adapter
-
     attr_reader :options
 
     def initialize(options = {})
@@ -32,9 +30,8 @@ module Ruboty
     end
 
     # @return [true] Because it needs to tell that an action is matched.
-    undef :say
     def say(*args)
-      adapter.say(*args)
+      adapters.each { |adapter| adapter.say(*args) }
       true
     end
 
@@ -51,13 +48,16 @@ module Ruboty
     private
 
     def adapt
-      adapter.run
+      adapters.each do |adapter|
+        Thread.new { adapter.run }
+      end
+      sleep
     end
 
-    def adapter
+    def adapters
       AdapterBuilder.new(self).build
     end
-    memoize :adapter
+    memoize :adapters
 
     def bundle
       Bundler.require(:default, env)
